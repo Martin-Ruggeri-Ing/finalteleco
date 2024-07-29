@@ -3,8 +3,9 @@ kind: Service
 metadata:
   name: mstream
 spec:
-  ports:
-  - port: 80
-    name: http
   selector:
     app: mstream
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
