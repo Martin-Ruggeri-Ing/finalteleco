@@ -1,10 +1,9 @@
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: ConfigMap
 metadata:
-  name: music-storage
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+  name: music-config
+data:
+  SONG1: |
+    ./SONG1.mp3
+  SONG2: |
+    ---contenido del segundo archivo MP3---
