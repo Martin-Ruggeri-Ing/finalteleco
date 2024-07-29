@@ -2,33 +2,45 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mstream
-  labels:
-    app: mstream
 spec:
+  serviceName: "mstream"
+  replicas: 1
   selector:
     matchLabels:
       app: mstream
-  serviceName: mstream
-  replicas: 1
   template:
     metadata:
       labels:
         app: mstream
     spec:
       containers:
-        - name: mstream
-          image: linuxserver/mstream:5.12.2
-          ports:
-            - containerPort: 3000
-              name: web
-          volumeMounts:
-            - name: music-storage
-              mountPath: /music
+      - name: mstream
+        image: linuxserver/mstream:5.12.2
+        ports:
+        - containerPort: 80
+        env:
+        - name: SONG1
+          valueFrom:
+            configMapKeyRef:
+              name: music-config
+              key: SONG1
+        - name: SONG2
+          valueFrom:
+            configMapKeyRef:
+              name: music-config
+              key: SONG2
+        volumeMounts:
+        - name: music-files
+          mountPath: /config/www/music
+      volumes:
+      - name: music-files
+        configMap:
+          name: music-config
   volumeClaimTemplates:
-    - metadata:
-        name: music-storage
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 1Gi
+  - metadata:
+      name: music-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi

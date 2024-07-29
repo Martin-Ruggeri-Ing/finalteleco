@@ -1,13 +1,23 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: stream
+  name: mstream
+spec:
+  ports:
+  - port: 80
+    name: http
+  clusterIP: None
+  selector:
+    app: mstream
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mstream-lb
 spec:
   type: LoadBalancer
   ports:
   - port: 80
-    targetPort: 3000
-    protocol: TCP
-    name: http
+    targetPort: 80
   selector:
-    app: stream
+    app: mstream

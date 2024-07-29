@@ -1,19 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: mstream-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    kubernetes.io/ingress.class: nginx
-  name: stream
 spec:
   rules:
   - host: mlruggieri-stream.my.kube.um.edu.ar
     http:
       paths:
-      - backend:
+      - path: /
+        pathType: Prefix
+        backend:
           service:
-            name: stream
+            name: mstream-lb
             port:
               number: 80
-        path: /
-        pathType: Prefix
